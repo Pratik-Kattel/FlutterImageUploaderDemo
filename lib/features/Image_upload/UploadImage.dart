@@ -14,6 +14,11 @@ class UploadImage extends StatefulWidget{
 }
 
 class UploadImageState extends State<UploadImage>{
+  Future<void> uploadImage() async{
+
+  }
+
+
   @override
   Widget build (BuildContext context){
     return Scaffold(
@@ -59,7 +64,25 @@ class UploadImageState extends State<UploadImage>{
                 SizedBox(
                   height: 40.h,
                 ),
-                Text("Press the button below to add your photos",style: Theme.of(context).textTheme.bodyMedium,)
+                Text("Press the button below to add your photos",style: Theme.of(context).textTheme.bodyMedium,),
+                SizedBox(
+                  height: 160.h,
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                child:
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink.shade100,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)
+                      ),
+                      fixedSize: Size(170.w, 20.h)
+                    ),
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/PreviewPage');
+                    }, child: Text("Preview Images",style: Theme.of(context).textTheme.bodyLarge,selectionColor: Colors.amber,))
+                )
               ]
         )
         )
@@ -68,7 +91,6 @@ class UploadImageState extends State<UploadImage>{
       floatingActionButton: FloatingActionButton(onPressed: (){
         ImageSourceBottomSheet.showBottomSheet(context, (source){
           final ImagePicker picker=ImagePicker();
-          final pickedFile=picker.pickImage(source: source);
         });
       },
       child: Icon(Icons.add),
