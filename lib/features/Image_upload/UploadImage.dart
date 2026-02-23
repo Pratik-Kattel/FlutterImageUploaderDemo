@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:imageuploader/Constants/open_default_apps.dart';
 import 'package:imageuploader/Custom_Widgets/svg_pictures.dart';
 import 'package:imageuploader/Custom_Widgets/image_source_buttomsheet.dart';
+import 'package:imageuploader/features/Image_view/Image_view_page.dart';
 
 class UploadImage extends StatefulWidget{
   const UploadImage({super.key});
@@ -14,7 +16,16 @@ class UploadImage extends StatefulWidget{
 }
 
 class UploadImageState extends State<UploadImage>{
-  Future<void> uploadImage() async{
+  static File? selectedImage;
+  Future<void> uploadImage(ImageSource source) async{
+    final ImagePicker picker=ImagePicker();
+    final XFile? pickedImage=await picker.pickImage(source: source);
+
+    if(pickedImage!=null){
+      setState(() {
+        selectedImage=File(pickedImage.path);
+      });
+    }
 
   }
 
@@ -80,7 +91,30 @@ class UploadImageState extends State<UploadImage>{
                       fixedSize: Size(170.w, 20.h)
                     ),
                     onPressed: (){
-                      Navigator.pushNamed(context, '/PreviewPage');
+                      if(selectedImage==null){
+                        showDialog(context: context, builder: (context) {
+                        return  AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)
+                          ),
+                            title: Text("No image selected",style: TextStyle(
+                              color: Colors.red
+                            ),
+                            ),
+                            content: Text("Please select any image to preview it",style: Theme.of(context).textTheme.bodyMedium,),
+                            actions: [
+                              TextButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, child: Text("OK",style: TextStyle(
+                                color: Colors.blue
+                              ),))
+                            ],
+                          );
+                        }
+                        );
+                        return;
+                      }
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>ImagePreview(imageFile: selectedImage!)));
                     }, child: Text("Preview Images",style: Theme.of(context).textTheme.bodyLarge,selectionColor: Colors.amber,))
                 )
               ]
@@ -90,7 +124,10 @@ class UploadImageState extends State<UploadImage>{
     ),
       floatingActionButton: FloatingActionButton(onPressed: (){
         ImageSourceBottomSheet.showBottomSheet(context, (source){
-          final ImagePicker picker=ImagePicker();
+          uploadImage(source);
+          if(selectedImage!=null){
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>ImagePreview(imageFile: selectedImage!,)));
+          }
         });
       },
       child: Icon(Icons.add),
