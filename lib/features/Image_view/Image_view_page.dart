@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:imageuploader/features/Full_screen_view.dart';
 
 class ImagePreview extends StatelessWidget {
   final List<File> imageFile;
@@ -21,9 +22,13 @@ class ImagePreview extends StatelessWidget {
         itemCount: imageFile.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,crossAxisSpacing: 7,mainAxisSpacing: 7),
         itemBuilder: (context,index){
-          return Image.file(
+          return GestureDetector(
+            onTap: ()=>Navigator.push(context,MaterialPageRoute(builder: (_)=>FullScreenView(imageURl: imageFile[index]))),
+          child:
+            Image.file(
             imageFile[index],
                 fit: BoxFit.cover,
+            )
           );
         },
 
