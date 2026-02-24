@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:imageuploader/Constants/app_routes.dart';
 import 'package:imageuploader/Splash/screen/splash_screen.dart';
 import 'package:imageuploader/Constants/app_themes.dart';
 
-void main()=>runApp(Myapp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+ await Hive.openBox<List>('imagePaths');
+  runApp(Myapp());}
 
 class Myapp extends StatelessWidget{
   const Myapp({super.key});

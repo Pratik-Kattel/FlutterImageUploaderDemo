@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:math';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,6 +28,9 @@ class UploadImageState extends State<UploadImage> {
         selectedImage = pickedImage.map((e) => File(e.path)).toList();
       });
     }
+    var box=Hive.box('imagePaths');
+    List<String> paths=selectedImage!.map((file)=>file.path).toList();
+    box.put('imagePaths', paths);
   }
 
   @override
