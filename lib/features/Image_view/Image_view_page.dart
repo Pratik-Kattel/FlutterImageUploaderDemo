@@ -17,23 +17,39 @@ class ImagePreview extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: imageFile.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,crossAxisSpacing: 7,mainAxisSpacing: 7),
-        itemBuilder: (context,index){
-          return GestureDetector(
-            onTap: ()=>Navigator.push(context,MaterialPageRoute(builder: (_)=>FullScreenView(imageURl: imageFile[index]))),
-          child:
-            Image.file(
-            imageFile[index],
-                fit: BoxFit.cover,
-            )
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          int crossAxisCount;
+          if (constraints.maxWidth < 600) {
+            crossAxisCount = 3;
+          } else if (constraints.maxWidth < 1024) {
+            crossAxisCount = 5;
+          } else {
+            crossAxisCount = 8;
+          }
+
+          return GridView.builder(
+            padding: EdgeInsets.all(10),
+            itemCount: imageFile.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 7,
+              mainAxisSpacing: 7,
+            ),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => FullScreenView(imageURl: imageFile[index]),
+                  ),
+                ),
+                child: Image.file(imageFile[index], fit: BoxFit.cover),
+              );
+            },
           );
         },
-
-        ),
+      ),
     );
   }
-
 }
