@@ -7,23 +7,26 @@ import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
-  final String path=AssetsPath.animation;
+
+  // Path to the Lottie animation asset
+  final String path = AssetsPath.animation;
+
   @override
-  Widget build (BuildContext context){
-    return AnimatedSplashScreen(splash:
-        Column(
-          children: [
-            Expanded(child:
-            Center(
-              child: LottieBuilder.asset(path)
-            )
-            )
-          ],
-        ),
-        splashIconSize: 700,
-        duration: 2200
-
-        , nextScreen:UploadImage());
+  Widget build(BuildContext context) {
+    return AnimatedSplashScreen(
+      // The splash content: a column with the animation centered
+      splash: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: LottieBuilder.asset(path), // Load Lottie animation
+            ),
+          ),
+        ],
+      ),
+      splashIconSize: 700, // Size of the splash animation
+      duration: 2200, // Duration of splash screen in milliseconds
+      nextScreen: UploadImage(), // Navigate to UploadImage screen after splash
+    );
   }
-
 }

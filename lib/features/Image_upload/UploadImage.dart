@@ -17,20 +17,44 @@ class UploadImage extends StatefulWidget {
 }
 
 class UploadImageState extends State<UploadImage> {
+  // List to hold selected images
   static List<File>? selectedImage = [];
 
+  @override
+  void initState() {
+    super.initState();
+    // Load previously selected images from Hive storage
+    loadImageFromHive();
+  }
+
+  // Function to pick images from gallery or camera
   Future<void> uploadImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile>? pickedImage = await picker.pickMultiImage();
+    final List<XFile>? pickedImage = await picker
+        .pickMultiImage(); // Pick multiple images
 
-    if (pickedImage != null) {
+    if (pickedImage != null && pickedImage.isNotEmpty) {
       setState(() {
+        // Convert picked XFile objects to File objects
         selectedImage = pickedImage.map((e) => File(e.path)).toList();
       });
     }
-    var box=Hive.box('imagePaths');
-    List<String> paths=selectedImage!.map((file)=>file.path).toList();
+
+    // Save the file paths to Hive for persistent storage
+    var box = Hive.box<List>('imagePaths');
+    List<String> paths = selectedImage!.map((file) => file.path).toList();
     box.put('imagePaths', paths);
+  }
+
+  // Load previously stored image paths from Hive
+  void loadImageFromHive() {
+    var box = Hive.box<List>('imagePaths');
+    List<dynamic>? storedPaths = box.get('imagePaths');
+    if (storedPaths != null) {
+      setState(() {
+        selectedImage = storedPaths.map((path) => File(path)).toList();
+      });
+    }
   }
 
   @override
@@ -52,6 +76,7 @@ class UploadImageState extends State<UploadImage> {
             padding: EdgeInsetsGeometry.all(20.h),
             child: Column(
               children: [
+                // Description about the app
                 Text(
                   "This is a simple Flutter application built to demonstrate how image uploading works in flutter.",
                   style: Theme.of(context).textTheme.bodyLarge,
@@ -67,6 +92,7 @@ class UploadImageState extends State<UploadImage> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 SizedBox(height: 50.h),
+                // Row of social/contact icons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -108,6 +134,7 @@ class UploadImageState extends State<UploadImage> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: 100.h),
+                // Button to preview selected images
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: ElevatedButton(
@@ -119,6 +146,7 @@ class UploadImageState extends State<UploadImage> {
                       fixedSize: Size(170.w, 35.h),
                     ),
                     onPressed: () {
+                      // Show alert if no image is selected
                       if (selectedImage!.isEmpty) {
                         showDialog(
                           context: context,
@@ -151,6 +179,7 @@ class UploadImageState extends State<UploadImage> {
                         );
                         return;
                       }
+                      // Navigate to preview page if images are selected
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -171,12 +200,14 @@ class UploadImageState extends State<UploadImage> {
           ),
         ],
       ),
+      // Floating button to add images
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // Show bottom sheet to pick images from gallery or camera
           ImageSourceBottomSheet.showBottomSheet(context, (source) {
-            uploadImage(source);
+            uploadImage(source); // Call upload function
             if (selectedImage != null) {
-              ImagePreview(imageFile: selectedImage!,);
+              ImagePreview(imageFile: selectedImage!);
             }
           });
         },

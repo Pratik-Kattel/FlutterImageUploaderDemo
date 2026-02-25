@@ -4,20 +4,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-class FullScreenView extends StatelessWidget{
+class FullScreenView extends StatelessWidget {
+  // The image file to display in full screen
   final File imageURl;
+
   @override
-  const FullScreenView({super.key,required this.imageURl});
+  const FullScreenView({super.key, required this.imageURl});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.grey, // Background color behind the image
       body: GestureDetector(
-        onTap: ()=>Navigator.pop(context),
+        // Close full-screen view when user taps anywhere
+        onTap: () => Navigator.pop(context),
         child: Center(
-          child: PhotoView(imageProvider:FileImage(imageURl)),
+          // Display the image using PhotoView for zooming/panning
+          child: PhotoView(
+            imageProvider: FileImage(imageURl), // Load image from file
+          ),
         ),
-      )
+      ),
     );
   }
 }
