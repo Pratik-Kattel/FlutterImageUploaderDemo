@@ -1,16 +1,18 @@
-# imageuploader
+# Flutter Image Uploader App
 
-A new Flutter project.
+A simple Flutter application that allows users to **upload, view, and preview images** on their devices. This project demonstrates key Flutter concepts such as **image picking, responsive UI, local storage with Hive, and full-screen image preview**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- **Image Upload:** Pick multiple images from the **gallery** or capture using the **camera**.
+- **Persistent Storage:** Selected images are saved locally using **Hive** and loaded automatically on app restart.
+- **Responsive UI:** Supports multiple screen sizes with **ScreenUtil**.
+- **Full-Screen View:** Tap on an image to view it in full-screen with **zoom and pan support** via `photo_view`.
+- **Social/Contact Integration:** Quick links to **Facebook, Instagram, GitHub, LinkedIn**, and **Phone** using `url_launcher`.
+- **Animated Splash Screen:** Beautiful **Lottie animation** on app start.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
